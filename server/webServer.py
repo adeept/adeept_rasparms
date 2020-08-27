@@ -357,7 +357,7 @@ def pathCtrl(command):
 					pathSaved[1] = 0
 
 				if pathSaved[1] == 0:
-					ras.planGoes(ras.planData)
+					ras.planThreadingStart()
 				elif pathSaved[1] == 1:
 					ras.createNewPlan()
 					pathLevel += 1
@@ -387,7 +387,9 @@ def pathCtrl(command):
 		if pathLevel == 2:
 			ras.savePlanJson()
 		pathLevel = 0
+		ras.moveThreadingStop()
 		pathInit()
+		ras.moveThreadingStop()
 		time.sleep(0.2)
 
 		oledUpdate()
@@ -637,12 +639,13 @@ def tcpConnection():
 
 def ipUpdate():
 	global L0_text_1
+	time.sleep(15)
 	while 1:
 		s =socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 		s.connect(("1.1.1.1",80))
 		ipaddr_check=s.getsockname()[0]
 		s.close()
-		print(ipaddr_check)
+		# print(ipaddr_check)
 		L0_text_1 = 'IP:'+ipaddr_check+' '
 		oledUpdate()
 		time.sleep(15)

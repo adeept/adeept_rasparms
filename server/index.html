@@ -3,18 +3,18 @@
 </head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>树莓派 bottle web</title>
+	<title>Adeept Bot WebServer</title>
 	<link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<script src="http://code.jquery.com/jquery.js"></script>
 	<style type="text/css">
-		
-		/* .image-container {    
-                position: absolute;
-				left:50;
-				top:250;
-                min-width: 160;
-            } */
-
+				*{
+			-moz-user-select: none;
+			-o-user-select: none;
+			-khtml-user-select:none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
 			.Submit {
 			background-color: #000000;
 			border: 0px;
@@ -49,8 +49,7 @@
 			top:57%;
 		}
 
-
-		/* .text1 {     
+		/* .text {     
 			display: block;
 			font-weight: 20%;
 			overflow: hidden;
@@ -61,8 +60,7 @@
 			position:absolute;
 			left:36%;
 			top:67%;
-		} 
-		 */
+		} */
 
 		.X_add {
 			background-color: #000000;
@@ -212,7 +210,7 @@
 			top:20%;
 		}
 		
-
+/* 
 		.xyzctrl {
 			background-color: #000000;
 			border: 0px;
@@ -250,7 +248,7 @@
 			left:53%;
 			top:63%;
 		}
-		
+		 */
 		.savepos {
 			background-color: #000000;
 			border: 0px;
@@ -371,7 +369,7 @@
 <body style="background-color: #ccffcc">
 
 	<input class = "Submit"type="submit" value="0" id = "submit"/>
-		<input class = "text"type="submit" value="0" id = "text11"/>
+		<!-- <input class = "text"type="submit" value="0" id = "text"/> -->
 	<form  action=""id = "speed">
 		<input class = "speed"type="range"onChange = "judge();" name="speed"id = "speed_value"min="0" max="100" value="0" style="width:150px" /><br />
 	</form>
@@ -385,8 +383,8 @@
 		<button class="Z_minus" id="Z_minus">Z -</button>
 		<button class="G_add" id="G_add">G +</button>
 		<button class="G_minus" id="G_minus">G -</button>
-		<button class="xyzctrl" id="xyzctrl">XYZ Ctrl</button>
-		<button class="servoctrl" id="servoctrl">Servo Ctrl</button>
+		<!-- <button class="xyzctrl" id="xyzctrl">XYZ Ctrl</button> -->
+		<!-- <button class="servoctrl" id="servoctrl">Servo Ctrl</button> -->
 		<button class="savepos" id="savepos">Save Pos</button>
 		<button class="stop" id="stop">Stop</button>
 		<button class="plan" id="plan">Plan</button>
@@ -395,23 +393,11 @@
 
 	</section>
 
-		<!-- </div> -->
-<!-- <div id="stream-container" ondragstart="drag(event)"draggable="true" class="image-container hidden"> -->
-	<!-- <img id="stream"   src=""> -->
-<!-- </div> -->
 </body>
 
 
  <script>
 	document.addEventListener('DOMContentLoaded', function (event) {
-
-	// 	function hero()
-	// {
-	// var herowidth=400;//改为你要的网页宽度
-	// var heroheight=300;//改为你要的网页高度
-	// window.onresize(herowidth,heroheight);
-	// }
-	// hero();
 
 		var flag = 0;
 		var system ={};  
@@ -436,8 +422,8 @@
 		const G_Minus = document.getElementById('G_minus')
 
 		
-		const xyz_ctrl = document.getElementById('xyzctrl')	
-		const servo_ctrl = document.getElementById('servoctrl')	
+		// const xyz_ctrl = document.getElementById('xyzctrl')	
+		// const servo_ctrl = document.getElementById('servoctrl')	
 		const save_pos = document.getElementById('savepos')	
 
 		const stop = document.getElementById('stop')	
@@ -554,26 +540,26 @@
 	}
 
 		// xyz Ctrl
-		xyz_ctrl.onmousedown = () => {
-						var button_data = document.getElementById('xyzctrl')
-						button_data.innerHTML = 'xyz ctrl'
-					}
-		xyz_ctrl.onmouseup = () => {
-		const button_data_up = document.getElementById('xyzctrl')
-		$.post("/cmd","XYZ_Ctrl",function(data,status){});
-		button_data_up.innerHTML = 'XYZ Ctrl'
-	}
+	// 	xyz_ctrl.onmousedown = () => {
+	// 					var button_data = document.getElementById('xyzctrl')
+	// 					button_data.innerHTML = 'xyz ctrl'
+	// 				}
+	// 	xyz_ctrl.onmouseup = () => {
+	// 	const button_data_up = document.getElementById('xyzctrl')
+	// 	$.post("/cmd","XYZ_Ctrl",function(data,status){});
+	// 	button_data_up.innerHTML = 'XYZ Ctrl'
+	// }
 	
 		// servo Ctrl
-		servo_ctrl.onmousedown = () => {
-						var button_data = document.getElementById('servoctrl')
-						button_data.innerHTML = 'servo ctrl'
-					}
-		servo_ctrl.onmouseup = () => {
-		const button_data_up = document.getElementById('servoctrl')
-		$.post("/cmd","servo_Ctrl",function(data,status){});
-		button_data_up.innerHTML = 'Servo Ctrl'
-	}
+	// 	servo_ctrl.onmousedown = () => {
+	// 					var button_data = document.getElementById('servoctrl')
+	// 					button_data.innerHTML = 'servo ctrl'
+	// 				}
+	// 	servo_ctrl.onmouseup = () => {
+	// 	const button_data_up = document.getElementById('servoctrl')
+	// 	$.post("/cmd","servo_Ctrl",function(data,status){});
+	// 	button_data_up.innerHTML = 'Servo Ctrl'
+	// }
 
 
 		// save postion
@@ -746,26 +732,26 @@
 // ontouchstart
 // on touch
 		// xyz Ctrl
-		xyz_ctrl.ontouchstart = () => {
-						var button_data = document.getElementById('xyzctrl')
-						button_data.innerHTML = 'xyz ctrl'
-					}
-		xyz_ctrl.ontouchend = () => {
-		const button_data_up = document.getElementById('xyzctrl')
-		$.post("/cmd","XYZ_Ctrl",function(data,status){});
-		button_data_up.innerHTML = 'XYZ Ctrl'
-	}
+	// 	xyz_ctrl.ontouchstart = () => {
+	// 					var button_data = document.getElementById('xyzctrl')
+	// 					button_data.innerHTML = 'xyz ctrl'
+	// 				}
+	// 	xyz_ctrl.ontouchend = () => {
+	// 	const button_data_up = document.getElementById('xyzctrl')
+	// 	$.post("/cmd","XYZ_Ctrl",function(data,status){});
+	// 	button_data_up.innerHTML = 'XYZ Ctrl'
+	// }
 	
 		// servo Ctrl
-		servo_ctrl.ontouchstart = () => {
-						var button_data = document.getElementById('servoctrl')
-						button_data.innerHTML = 'servo ctrl'
-					}
-		servo_ctrl.ontouchend = () => {
-		const button_data_up = document.getElementById('servoctrl')
-		$.post("/cmd","servo_Ctrl",function(data,status){});
-		button_data_up.innerHTML = 'Servo Ctrl'
-	}
+	// 	servo_ctrl.ontouchstart = () => {
+	// 					var button_data = document.getElementById('servoctrl')
+	// 					button_data.innerHTML = 'servo ctrl'
+	// 				}
+	// 	servo_ctrl.ontouchend = () => {
+	// 	const button_data_up = document.getElementById('servoctrl')
+	// 	$.post("/cmd","servo_Ctrl",function(data,status){});
+	// 	button_data_up.innerHTML = 'Servo Ctrl'
+	// }
 
 
 		// save postion
@@ -838,40 +824,146 @@
 			}
 		}
 
-	// 	function hero()
-	// {
-	// var herowidth=400;//改为你要的网页宽度
-	// var heroheight=300;//改为你要的网页高度
-	// window.resizeTo(herowidth,heroheight);
-	// }
-	// hero();
 
 
 
-		// function drag(event){
-
-		// 	event.dataTransfer.setData("Text",event.target.id)
-
-		// 	// $.post("/cmd", document.getElementById('value').value, function(data,status){});
-		// 	}
-		
-	// // speed
-	// function judge()
-	// 	{ 
-	// 		const slider = document.getElementById('speed_value') 
-	// 		const slider_value = document.getElementById('submit') 
-	// 		slider_value.value = slider.value;
-	// 	};
-	// function drag(event){
-
-	// 			event.dataTransfer.setData("Text",event.target.id)
-				
-	// 		// $.post("/cmd", document.getElementById('value').value, function(data,status){});
+	// function keyboard_none(){
+	// 	// if(key_flag){
+	// 	// 	key_flag = 0;
+	// 		if(event.keyCode==87)	{		//W
+	// 			$.post("/cmd","X_add",function(data,status){});;
+	// 		}
+	// 		else if(event.keyCode==83){		//S
+	// 			$.post("/cmd","X_minus",function(data,status){});
 	// 			}
+	// 		else if(event.keyCode==65){		//A
+	// 			$.post("/cmd","Y_add",function(data,status){})
+	// 		}
+	// 		else if(event.keyCode==68){		//D
+	// 			$.post("/cmd","Y_minus",function(data,status){})
+	// 		}
+			
+	// 		else if(event.keyCode==82){		//R
+	// 			$.post("/cmd","Z_add",function(data,status){})
+	// 		}
+	// 		else if(event.keyCode==70){		//F
+	// 			$.post("/cmd","G_minus",function(data,status){})
+	// 		}
+	// 		else {
 
+	// 		};
+	// 	}
+	
 		
 	});
 
+	// var key_flag = 1;
+	// document.onkeydown= () =>{
+	// //document.onkeydown=function(){
+	// 	if(key_flag){
+	// 		key_flag = 0;
+	// 		// if(event.keyCode==87)	{	
+	// 		// 	const button_data = document.getElementById('X_add')
+	// 		// 	$.post("/cmd",'X_add',function(data,status){});
+	// 		// 	button_data.innerHTML = 'X+'
+	// 		// 	}
+	// 			var currentkey = event.keyCode;
+	// 			switch(currentkey){
+	// 				case 87:	{	//w
+	// 				const button_data = document.getElementById('X_add')
+	// 				$.post("/cmd",'X_add',function(data,status){});
+	// 				button_data.innerHTML = 'X+'
+	// 				} break;
+	// 				case 83:	{	//S
+	// 				const button_data = document.getElementById('X_minus')
+	// 				$.post("/cmd",'X_minus',function(data,status){});
+	// 				button_data.innerHTML = 'X-'
+	// 				} break;
+	// 				case 65:	{	//A
+	// 				const button_data = document.getElementById('Y_add')
+	// 				$.post("/cmd",'Y_add',function(data,status){});
+	// 				button_data.innerHTML = 'Y+'
+	// 				} break;
+	// 				case 68:	{	//D
+	// 				const button_data = document.getElementById('Y_minus')
+	// 				$.post("/cmd",'Y_minus',function(data,status){});
+	// 				button_data.innerHTML = 'Y-'
+	// 				} break;
+	// 				case 82:	{	//R
+	// 				const button_data = document.getElementById('Z_add')
+	// 				$.post("/cmd",'Z_add',function(data,status){});
+	// 				button_data.innerHTML = 'Z+'
+	// 				} break;
+	// 				case 70:	{	//F
+	// 				const button_data = document.getElementById('Z_minus')
+	// 				$.post("/cmd",'Z_minus',function(data,status){});
+	// 				button_data.innerHTML = 'Z-'
+	// 				} break; 
+	// 				case 74:	{	//J
+	// 				const button_data = document.getElementById('G_add')
+	// 				$.post("/cmd",'G_add',function(data,status){});
+	// 				button_data.innerHTML = 'G+'
+	// 				} break; 
+	// 				case 75:	{	//K
+	// 				const button_data = document.getElementById('G_minus')
+	// 				$.post("/cmd",'G_minus',function(data,status){});
+	// 				button_data.innerHTML = 'G-'
+	// 				} break; 
+	// 			}
+	// 		}
+	// 	}
+		
+	// document.onkeyup=function(){
+	// 		// key_flag = 1;
+	// 		if(event.keyCode==87)	{	//W
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('X_add')
+	// 			$.post("/cmd",'XS',function(data,status){});
+	// 			button_data.innerHTML = 'X +'
+	// 			}
+	// 		else if(event.keyCode==83)	{	//S
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('X_minus')
+	// 			$.post("/cmd",'XS',function(data,status){});
+	// 			button_data.innerHTML = 'X -'
+	// 			}
+	// 		else if(event.keyCode==65){	//A
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('Y_add')
+	// 			$.post("/cmd",'YS',function(data,status){});
+	// 			button_data.innerHTML = 'Y +'
+	// 			}
+	// 		else if(event.keyCode==68)	{	//D
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('Y_minus')
+	// 			$.post("/cmd",'YS',function(data,status){});
+	// 			button_data.innerHTML = 'Y -'
+	// 			}
+	// 		else if(event.keyCode==82)	{	//R
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('Z_add')
+	// 			$.post("/cmd",'ZS',function(data,status){});
+	// 			button_data.innerHTML = 'Z +'
+	// 			}
+	// 		else if(event.keyCode==70)	{	//F
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('Z_minus')
+	// 			$.post("/cmd",'ZS',function(data,status){});
+	// 			button_data.innerHTML = 'Z -'
+	// 			}
+	// 		else if(event.keyCode==74)	{	//J
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('G_add')
+	// 			$.post("/cmd",'GS',function(data,status){});
+	// 			button_data.innerHTML = 'G +'
+	// 			}
+	// 		else if(event.keyCode==75)	{	//K
+	// 			key_flag = 1;
+	// 			const button_data = document.getElementById('G_minus')
+	// 			$.post("/cmd",'GS',function(data,status){});
+	// 			button_data.innerHTML = 'G -'
+	// 			}
+	// }
 	// speed
 	function judge()
 		{ 
@@ -887,20 +979,6 @@
 			// $.post("/cmd", document.getElementById('value').value, function(data,status){});
 				}
 
-			function text_test(){ 
-
-				// var url1 = document.location.origin
-				// url = url1 + "/value"
-					var xx = window.frames("myframe").document.getElementById("bd").innerHTML;
-					document.getElementById("text11").value = xx;
-
-		// const slider = document.getElementById('speed_value') 
-		// const slider_value = document.getElementById('submit') 
-		
-		// slider_value.value = slider.value;
-	};
-		
-
 	var flag = 0;
 		var system ={};  
 		var p = navigator.platform;       
@@ -910,17 +988,124 @@
 		if(system.win||system.xll){					//if PC
 			   window.location.href="#";  
 			   flag = 0;
-		}else{  //如果是手机,跳转到
+		}else{  // if phone
 			  window.location.href="#";  
 			  flag = 1;
 		}
 		if(flag == 0)
 		{
-			document.onkeydown=function(){keyboard()}
-			document.onkeyup=function(){keyboard_none()}
 			
+		var key_flag = 1;
+		document.onkeydown= () =>{
+		//document.onkeydown=function(){
+			if(key_flag){
+				key_flag = 0;
+				// if(event.keyCode==87)	{	
+				// 	const button_data = document.getElementById('X_add')
+				// 	$.post("/cmd",'X_add',function(data,status){});
+				// 	button_data.innerHTML = 'X+'
+				// 	}
+				var currentkey = event.keyCode;
+				switch(currentkey){
+					case 87:	{	//w
+					const button_data = document.getElementById('X_add')
+					$.post("/cmd",'X_add',function(data,status){});
+					button_data.innerHTML = 'X+'
+					} break;
+					case 83:	{	//S
+					const button_data = document.getElementById('X_minus')
+					$.post("/cmd",'X_minus',function(data,status){});
+					button_data.innerHTML = 'X-'
+					} break;
+					case 65:	{	//A
+					const button_data = document.getElementById('Y_add')
+					$.post("/cmd",'Y_add',function(data,status){});
+					button_data.innerHTML = 'Y+'
+					} break;
+					case 68:	{	//D
+					const button_data = document.getElementById('Y_minus')
+					$.post("/cmd",'Y_minus',function(data,status){});
+					button_data.innerHTML = 'Y-'
+					} break;
+					case 82:	{	//R
+					const button_data = document.getElementById('Z_add')
+					$.post("/cmd",'Z_add',function(data,status){});
+					button_data.innerHTML = 'Z+'
+					} break;
+					case 70:	{	//F
+					const button_data = document.getElementById('Z_minus')
+					$.post("/cmd",'Z_minus',function(data,status){});
+					button_data.innerHTML = 'Z-'
+					} break; 
+					
+					case 74:	{	//J
+					const button_data = document.getElementById('G_add')
+					$.post("/cmd",'G_add',function(data,status){});
+					button_data.innerHTML = 'G+'
+					} break; 
+					
+					case 75:	{	//K
+					const button_data = document.getElementById('G_minus')
+					$.post("/cmd",'G_minus',function(data,status){});
+					button_data.innerHTML = 'G-'
+					} break; 
+				}
+				}
+			}
+			
+		document.onkeyup=function(){
+				// key_flag = 1;
+			if(event.keyCode==87)	{	//W
+				key_flag = 1;
+				const button_data = document.getElementById('X_add')
+				$.post("/cmd",'XS',function(data,status){});
+				button_data.innerHTML = 'X +'
+				}
+			else if(event.keyCode==83)	{	//S
+				key_flag = 1;
+				const button_data = document.getElementById('X_minus')
+				$.post("/cmd",'XS',function(data,status){});
+				button_data.innerHTML = 'X -'
+				}
+			else if(event.keyCode==65){	//A
+				key_flag = 1;
+				const button_data = document.getElementById('Y_add')
+				$.post("/cmd",'YS',function(data,status){});
+				button_data.innerHTML = 'Y +'
+				}
+			else if(event.keyCode==68)	{	//D
+				key_flag = 1;
+				const button_data = document.getElementById('Y_minus')
+				$.post("/cmd",'YS',function(data,status){});
+				button_data.innerHTML = 'Y -'
+				}
+			else if(event.keyCode==82)	{	//R
+				key_flag = 1;
+				const button_data = document.getElementById('Z_add')
+				$.post("/cmd",'ZS',function(data,status){});
+				button_data.innerHTML = 'Z +'
+				}
+			else if(event.keyCode==70)	{	//F
+				key_flag = 1;
+				const button_data = document.getElementById('Z_minus')
+				$.post("/cmd",'ZS',function(data,status){});
+				button_data.innerHTML = 'Z -'
+				}
+			else if(event.keyCode==74)	{	//J
+				key_flag = 1;
+				const button_data = document.getElementById('G_add')
+				$.post("/cmd",'GS',function(data,status){});
+				button_data.innerHTML = 'G +'
+				}
+			else if(event.keyCode==75)	{	//K
+				key_flag = 1;
+				const button_data = document.getElementById('G_minus')
+				$.post("/cmd",'GS',function(data,status){});
+				button_data.innerHTML = 'G -'
+				}
 		}
-	
+
+	}
 	 
     </script>
   
