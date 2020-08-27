@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+from bottle import get,post,run,request,template,route
+
+import RPi.GPIO as GPIO
+import time
+import sys 
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+
+####  定义Car类
+class Car(object):
+    def __init__(self):
+        self.enab_pin = [5,6,13,19]
+####  self.enab_pin是使能端的pin
+        self.inx_pin = [21,22,23,24]
+####  self.inx_pin是控制端in的pin
+        self.RightAhead_pin = self.inx_pin[0]
+        self.RightBack_pin = self.inx_pin[1]
+        self.LeftAhead_pin = self.inx_pin[2]
+        self.LeftBack_pin = self.inx_pin[3]
+####  分别是右轮前进，右轮退后，左轮前进，左轮退后的pin
+        self.setup()
+
+####  setup函数初始化端口
+    def setup(self):
+        print ("begin setup ena enb pin")
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        for pin in self.enab_pin: 
+            GPIO.setup(pin,GPIO.OUT)
+            GPIO.output(pin,GPIO.HIGH)
+####  初始化使能端pin，设置成高电平
+        pin = None
+        for pin in self.inx_pin:
+            GPIO.setup(pin,GPIO.OUT)
+            GPIO.output(pin,GPIO.LOW)
+####  初始化控制端pin，设置成低电平
+        print ("setup ena enb pin over")
+
+####  fornt函数，小车前进
+    def front(self):
+        self.setup()
+        GPIO.output(self.RightAhead_pin,GPIO.HIGH)
+        GPIO.output(self.LeftAhead_pin,GPIO.HIGH)
+
+####  leftFront函数，小车左拐弯
+    def leftFront(self):
+        self.setup()
+        GPIO.output(self.RightAhead_pin,GPIO.HIGH)
+
+####  rightFront函数，小车右拐弯
+    def rightFront(self):
+        self.setup()
+        GPIO.output(self.LeftAhead_pin,GPIO.HIGH)
+
+####  rear函数，小车后退
+    def rear(self):
+        self.setup()
+        GPIO.output(self.RightBack_pin,GPIO.HIGH)
+        GPIO.output(self.LeftBack_pin,GPIO.HIGH)
+
+####  leftRear函数，小车左退
+    def leftRear(self):
+        self.setup()
+        GPIO.output(self.RightBack_pin,GPIO.HIGH)
+
+####  rightRear函数，小车右退
+    def rightRear(self):
+        self.setup()
+        GPIO.output(self.LeftBack_pin,GPIO.HIGH)
+
+
+    def post_value(self):
+        value = 37.5
+        return value
+####  定义main主函数
+def main(status):
+
+    car = Car()
+
+    if status == "front":
+        car.front()
+    elif status == "leftFront":
+        car.leftFront()
+    elif status == "rightFront":
+        car.rightFront()
+    elif status == "rear":
+        car.rear()
+    elif status == "leftRear":
+        car.leftRear()
+    elif status == "rightRear":
+        car.rightRear()
+    elif status == "stop":
+        car.setup() 
+    elif status == "down":
+        print("down")
+    elif status == "up":
+        print("up")     
+    
+    else :
+        print("收到了一个数字")
+
+def main1(status):
+    if (status.isdigit()):
+        print(int(status))
+    else:
+        print(status)
+
+
+@get("/")
+def index():
+    return template("index")
+
+@get("/value")
+def get_some():
+    car = Car()
+    value11 = car.post_value()
+    # def p_value(value11):
+    print(str(value11))
+    return '<html><head></head><body id="bd"> {value} </body></html>'.format(value = str(value11))
+
+
+@post("/cmd")
+def cmd():
+    adss=request.body.read().decode()
+    print("按下了按钮:"+adss)
+    main1(adss)
+    return "OK"
+run(host="0.0.0.0")
+
+
+
+

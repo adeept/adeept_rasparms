@@ -1,0 +1,928 @@
+<html>
+<head>
+</head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>树莓派 bottle web</title>
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<style type="text/css">
+		
+		/* .image-container {    
+                position: absolute;
+				left:50;
+				top:250;
+                min-width: 160;
+            } */
+
+			.Submit {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 30px;
+			width: 55px;
+			min-width: 40px;
+			max-width: 40px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:35%;
+			top:50%;
+		}
+		
+		.speed {
+			display: block;
+			/* margin: 20%
+			padding: 20% */
+			font-weight: 20%;
+			overflow: hidden;
+			background: #fff;
+			border-radius: 50px;
+			
+			background-color: white;
+			position:absolute;
+			left:35%;
+			top:57%;
+		}
+
+
+		/* .text1 {     
+			display: block;
+			font-weight: 20%;
+			overflow: hidden;
+			background: #fff;
+			border-radius: 50px;
+			
+			background-color: white;
+			position:absolute;
+			left:36%;
+			top:67%;
+		} 
+		 */
+
+		.X_add {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;  /* 字体颜色*/
+			margin-top: 15px;
+			height: 50px;
+			width: 65px;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:25%;
+			top:10%;
+		}
+		.X_minus {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 50px;
+			width: 65;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:55%;
+			top:10%;
+		}
+
+		.G_add {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;  /* 字体颜色*/
+			margin-top: 15px;
+			height: 50px;
+			width: 65px;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:25%;
+			top:40%;
+		}
+		.G_minus {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 50px;
+			width: 65;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:55%;
+			top:40%;
+		}
+
+		.Z_add {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;  /* 字体颜色*/
+			margin-top: 15px;
+			height: 50px;
+			width: 65px;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:25%;
+			top:30%;
+		}
+		.Z_minus {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 50px;
+			width: 65;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:55%;
+			top:30%;
+		}
+
+		.Y_add {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 50px;
+			width: 65;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:25%;
+			top:20%;
+		}
+		.Y_minus {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 50px;
+			width: 65;
+			min-width: 85px;
+			max-width: 85px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:55%;
+			top:20%;
+		}
+		
+
+		.xyzctrl {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:27%;
+			top:63%;
+		}
+		
+		.servoctrl {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:53%;
+			top:63%;
+		}
+		
+		.savepos {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:27%;
+			top:70%;
+		}
+		
+		.stop {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:53%;
+			top:70%;
+		}
+
+		.plan {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:15%;
+			top:77%;
+		}
+		
+		.createplan {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:40%;
+			top:77%;
+		}
+		
+		.saveplan {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:65%;
+			top:77%;
+		}
+		.text {
+			background-color: #000000;
+			border: 0px;
+			color: #ffffff;
+			margin-top: 15px;
+			height: 40px;
+			width: 65;
+			min-width: 80px;
+			max-width: 80px;
+			font-size: 10px;
+			border-radius: 10px;
+			border: 0;
+			background-color: #47a6ff;
+			outline: none;
+			position:absolute;
+			left:65%;
+			top:87%;
+		}
+
+
+	</style>
+</head>
+
+<body style="background-color: #ccffcc">
+
+	<input class = "Submit"type="submit" value="0" id = "submit"/>
+		<input class = "text"type="submit" value="0" id = "text11"/>
+	<form  action=""id = "speed">
+		<input class = "speed"type="range"onChange = "judge();" name="speed"id = "speed_value"min="0" max="100" value="0" style="width:150px" /><br />
+	</form>
+
+	<section id="buttons">
+		<button class="X_add" id="X_add">X +</button>
+		<button class="X_minus" id="X_minus">X -</button>
+		<button class="Y_add"  id="Y_add">Y +</button>
+		<button class="Y_minus" id="Y_minus">Y -</button>
+		<button class="Z_add" id="Z_add">Z +</button>
+		<button class="Z_minus" id="Z_minus">Z -</button>
+		<button class="G_add" id="G_add">G +</button>
+		<button class="G_minus" id="G_minus">G -</button>
+		<button class="xyzctrl" id="xyzctrl">XYZ Ctrl</button>
+		<button class="servoctrl" id="servoctrl">Servo Ctrl</button>
+		<button class="savepos" id="savepos">Save Pos</button>
+		<button class="stop" id="stop">Stop</button>
+		<button class="plan" id="plan">Plan</button>
+		<button class="createplan" id="createplan">Create Plan</button>
+		<button class="saveplan" id="saveplan">Save Plan</button>
+
+	</section>
+
+		<!-- </div> -->
+<!-- <div id="stream-container" ondragstart="drag(event)"draggable="true" class="image-container hidden"> -->
+	<!-- <img id="stream"   src=""> -->
+<!-- </div> -->
+</body>
+
+
+ <script>
+	document.addEventListener('DOMContentLoaded', function (event) {
+
+	// 	function hero()
+	// {
+	// var herowidth=400;//改为你要的网页宽度
+	// var heroheight=300;//改为你要的网页高度
+	// window.onresize(herowidth,heroheight);
+	// }
+	// hero();
+
+		var flag = 0;
+		var system ={};  
+		var p = navigator.platform;       
+		system.win = p.indexOf("Win") == 0;  
+		system.mac = p.indexOf("Mac") == 0;  
+		system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);     
+		if(system.win||system.xll){
+			   window.location.href="#";  
+			   flag = 0;
+		}else{ 
+			  window.location.href="#";  
+			  flag = 1;
+		}
+		const X_Add = document.getElementById('X_add')	
+		const X_Minus = document.getElementById('X_minus')	
+		const Y_Add = document.getElementById('Y_add')	
+		const Y_Minus = document.getElementById('Y_minus')	
+		const Z_Add = document.getElementById('Z_add')	
+		const Z_Minus = document.getElementById('Z_minus')	
+		const G_Add = document.getElementById('G_add')	
+		const G_Minus = document.getElementById('G_minus')
+
+		
+		const xyz_ctrl = document.getElementById('xyzctrl')	
+		const servo_ctrl = document.getElementById('servoctrl')	
+		const save_pos = document.getElementById('savepos')	
+
+		const stop = document.getElementById('stop')	
+
+		const plan = document.getElementById('plan')	
+
+		const create_plan = document.getElementById('createplan')	
+		const save_plan = document.getElementById('saveplan')	
+
+		
+		const speed = document.getElementById('speed')
+
+		// X Add		
+	if(flag == 0){
+			X_Add.onmousedown = () => {
+				const button_data = document.getElementById('X_add')
+				$.post("/cmd",'X_add',function(data,status){});
+				button_data.innerHTML = 'X+'
+			}
+			X_Add.onmouseup = () => {
+					const button_data_up = document.getElementById('X_add')
+					$.post("/cmd","XS",function(data,status){});
+					button_data_up.innerHTML = 'X +'
+				}
+			
+		// X Minus
+		X_Minus.onmousedown = () => {
+				if(flag == 0)
+				{
+					var button_data = document.getElementById('X_minus')
+					$.post("/cmd",'X_minus',function(data,status){});
+					button_data.innerHTML = 'X-'
+				}
+			}
+			if(flag == 0)
+			{
+		X_Minus.onmouseup = () => {
+				const button_data_up = document.getElementById('X_minus')
+				// button_data1.innerHTML = 'Forward_ov'
+				$.post("/cmd","XS",function(data,status){});
+				button_data_up.innerHTML = 'X -'
+			}
+		}
+	
+		// Y Add
+		Y_Add.onmousedown = () => {
+					var button_data = document.getElementById('Y_add')
+					$.post("/cmd",'Y_add',function(data,status){});
+					button_data.innerHTML = 'Y+'
+				}
+		Y_Add.onmouseup = () => {
+			const button_data_up = document.getElementById('Y_add')
+			$.post("/cmd","YS",function(data,status){});
+			button_data_up.innerHTML = 'Y +'
+		}
+		
+		// Y Minus
+		Y_Minus.onmousedown = () => {
+					var button_data = document.getElementById('Y_minus')
+					$.post("/cmd",'Y_minus',function(data,status){});
+					button_data.innerHTML = 'Y-'
+				}
+		Y_Minus.onmouseup = () => {
+		const button_data_up = document.getElementById('Y_minus')
+		$.post("/cmd","YS",function(data,status){});
+		button_data_up.innerHTML = 'Y -'
+	}
+
+		// Z Add
+		Z_Add.onmousedown = () => {
+					var button_data = document.getElementById('Z_add')
+					$.post("/cmd",'Z_add',function(data,status){});
+					button_data.innerHTML = 'Z+'
+				}
+		Z_Add.onmouseup = () => {
+		const button_data_up = document.getElementById('Z_add')
+		$.post("/cmd","ZS",function(data,status){});
+		button_data_up.innerHTML = 'Z +'
+	}
+		// Z Minus
+		Z_Minus.onmousedown = () => {
+					var button_data = document.getElementById('Z_minus')
+					$.post("/cmd",'Z_minus',function(data,status){});
+					button_data.innerHTML = 'Z-'
+				}
+		Z_Minus.onmouseup = () => {
+		const button_data_up = document.getElementById('Z_minus')
+		$.post("/cmd","ZS",function(data,status){});
+		button_data_up.innerHTML = 'Z -'
+	}
+
+		// G Add
+		G_Add.onmousedown = () => {
+						var button_data = document.getElementById('G_add')
+						$.post("/cmd",'G_add',function(data,status){});
+						button_data.innerHTML = 'G+'
+					}
+		G_Add.onmouseup = () => {
+		const button_data_up = document.getElementById('G_add')
+		$.post("/cmd","GS",function(data,status){});
+		button_data_up.innerHTML = 'G +'
+	}
+	
+		// G Minus
+		G_Minus.onmousedown = () => {
+					var button_data = document.getElementById('G_minus')
+					$.post("/cmd",'G_minus',function(data,status){});
+					button_data.innerHTML = 'G-'
+				}
+		G_Minus.onmouseup = () => {
+		const button_data_up = document.getElementById('G_minus')
+		$.post("/cmd","GS",function(data,status){});
+		button_data_up.innerHTML = 'G -'
+	}
+
+		// xyz Ctrl
+		xyz_ctrl.onmousedown = () => {
+						var button_data = document.getElementById('xyzctrl')
+						button_data.innerHTML = 'xyz ctrl'
+					}
+		xyz_ctrl.onmouseup = () => {
+		const button_data_up = document.getElementById('xyzctrl')
+		$.post("/cmd","XYZ_Ctrl",function(data,status){});
+		button_data_up.innerHTML = 'XYZ Ctrl'
+	}
+	
+		// servo Ctrl
+		servo_ctrl.onmousedown = () => {
+						var button_data = document.getElementById('servoctrl')
+						button_data.innerHTML = 'servo ctrl'
+					}
+		servo_ctrl.onmouseup = () => {
+		const button_data_up = document.getElementById('servoctrl')
+		$.post("/cmd","servo_Ctrl",function(data,status){});
+		button_data_up.innerHTML = 'Servo Ctrl'
+	}
+
+
+		// save postion
+		save_pos.onmousedown = () => {
+						var button_data = document.getElementById('savepos')
+						button_data.innerHTML = 'save pos'
+					}
+		save_pos.onmouseup = () => {
+				const button_data_up = document.getElementById('savepos')
+				$.post("/cmd","save_pos",function(data,status){});
+				button_data_up.innerHTML = 'Save Pos'
+			}
+
+		// stop
+		stop.onmousedown = () => {
+						var button_data = document.getElementById('stop')
+						button_data.innerHTML = 'stop'
+					}
+		stop.onmouseup = () => {
+		const button_data_up = document.getElementById('stop')
+		$.post("/cmd","stop",function(data,status){});
+		button_data_up.innerHTML = 'Stop'
+	}
+
+		// plan
+		plan.onmousedown = () => {
+						var button_data = document.getElementById('plan')
+						button_data.innerHTML = 'plan'
+					}
+		plan.onmouseup = () => {
+				const button_data_up = document.getElementById('plan')
+				$.post("/cmd","plan",function(data,status){});
+				button_data_up.innerHTML = 'Plan'
+			}
+		// create plan
+		create_plan.onmousedown = () => {
+						var button_data = document.getElementById('createplan')
+						button_data.innerHTML = 'create plan'
+					}
+		create_plan.onmouseup = () => {
+		const button_data_up = document.getElementById('createplan')
+		$.post("/cmd","create_plan",function(data,status){});
+		button_data_up.innerHTML = 'Create Plan'
+	}
+
+		// save plan
+		save_plan.onmousedown = () => {
+						var button_data = document.getElementById('saveplan')
+						button_data.innerHTML = 'save plan'
+					}
+		save_plan.onmouseup = () => {
+				const button_data_up = document.getElementById('saveplan')
+				$.post("/cmd","save_plan",function(data,status){});
+				button_data_up.innerHTML = 'Save Plan'
+			}
+		
+		// speed
+		speed.onmousedown = () => {
+			if(flag == 0)
+			{
+			}
+			
+			document.getElementById('submit').value = document.getElementById('speed_value').value
+			
+		 }
+		speed.onmouseup = () => {
+				const button_data_up = document.getElementById('speed_value')
+				$.post("/cmd",document.getElementById('speed_value').value,function(data,status){});
+			}
+
+		}
+		else{
+			
+			X_Add.ontouchstart = () => {
+				const button_data = document.getElementById('X_add')
+				$.post("/cmd",'X_add',function(data,status){});
+				button_data.innerHTML = 'X+'
+			}
+			X_Add.onmouseup = () => {
+					const button_data_up = document.getElementById('X_add')
+					$.post("/cmd","XS",function(data,status){});
+					button_data_up.innerHTML = 'X +'
+				}
+			
+
+		// X Minus
+		X_Minus.ontouchstart = () => {
+					var button_data = document.getElementById('X_minus')
+					$.post("/cmd",'X_minus',function(data,status){});
+					button_data.innerHTML = 'X-'
+				}
+		X_Minus.ontouchend = () => {
+				const button_data_up = document.getElementById('X_minus')
+				// button_data1.innerHTML = 'Forward_ov'
+				$.post("/cmd","XS",function(data,status){});
+				button_data_up.innerHTML = 'X -'
+			}
+	
+		// Y Add
+		Y_Add.ontouchstart = () => {
+					var button_data = document.getElementById('Y_add')
+					$.post("/cmd",'Y_add',function(data,status){});
+					button_data.innerHTML = 'Y+'
+				}
+		Y_Add.ontouchend = () => {
+			const button_data_up = document.getElementById('Y_add')
+			$.post("/cmd","YS",function(data,status){});
+			button_data_up.innerHTML = 'Y +'
+		}
+		
+		// Y Minus
+		Y_Minus.ontouchstart = () => {
+					var button_data = document.getElementById('Y_minus')
+					$.post("/cmd",'Y_minus',function(data,status){});
+					button_data.innerHTML = 'Y-'
+				}
+		Y_Minus.ontouchend = () => {
+		const button_data_up = document.getElementById('Y_minus')
+		$.post("/cmd","YS",function(data,status){});
+		button_data_up.innerHTML = 'Y -'
+	}
+
+		// Z Add
+		Z_Add.ontouchstart = () => {
+					var button_data = document.getElementById('Z_add')
+					$.post("/cmd",'Z_add',function(data,status){});
+					button_data.innerHTML = 'Z+'
+				}
+		Z_Add.ontouchend = () => {
+		const button_data_up = document.getElementById('Z_add')
+		$.post("/cmd","ZS",function(data,status){});
+		button_data_up.innerHTML = 'Z +'
+	}
+		// Z Minus
+		Z_Minus.ontouchstart = () => {
+					var button_data = document.getElementById('Z_minus')
+					$.post("/cmd",'Z_minus',function(data,status){});
+					button_data.innerHTML = 'Z-'
+				}
+		Z_Minus.ontouchend = () => {
+		const button_data_up = document.getElementById('Z_minus')
+		$.post("/cmd","ZS",function(data,status){});
+		button_data_up.innerHTML = 'Z -'
+	}
+
+		// G Add
+		G_Add.ontouchstart = () => {
+						var button_data = document.getElementById('G_add')
+						$.post("/cmd",'G_add',function(data,status){});
+						button_data.innerHTML = 'G+'
+					}
+		G_Add.ontouchend = () => {
+		const button_data_up = document.getElementById('G_add')
+		$.post("/cmd","GS",function(data,status){});
+		button_data_up.innerHTML = 'G +'
+	}
+	
+		// G Minus
+		G_Minus.ontouchstart = () => {
+					var button_data = document.getElementById('G_minus')
+					$.post("/cmd",'G_minus',function(data,status){});
+					button_data.innerHTML = 'G-'
+				}
+		G_Minus.ontouchend = () => {
+		const button_data_up = document.getElementById('G_minus')
+		$.post("/cmd","GS",function(data,status){});
+		button_data_up.innerHTML = 'G -'
+	}
+
+// ontouchstart
+// on touch
+		// xyz Ctrl
+		xyz_ctrl.ontouchstart = () => {
+						var button_data = document.getElementById('xyzctrl')
+						button_data.innerHTML = 'xyz ctrl'
+					}
+		xyz_ctrl.ontouchend = () => {
+		const button_data_up = document.getElementById('xyzctrl')
+		$.post("/cmd","XYZ_Ctrl",function(data,status){});
+		button_data_up.innerHTML = 'XYZ Ctrl'
+	}
+	
+		// servo Ctrl
+		servo_ctrl.ontouchstart = () => {
+						var button_data = document.getElementById('servoctrl')
+						button_data.innerHTML = 'servo ctrl'
+					}
+		servo_ctrl.ontouchend = () => {
+		const button_data_up = document.getElementById('servoctrl')
+		$.post("/cmd","servo_Ctrl",function(data,status){});
+		button_data_up.innerHTML = 'Servo Ctrl'
+	}
+
+
+		// save postion
+		save_pos.ontouchstart = () => {
+						var button_data = document.getElementById('savepos')
+						button_data.innerHTML = 'save pos'
+					}
+		save_pos.ontouchend = () => {
+				const button_data_up = document.getElementById('savepos')
+				$.post("/cmd","save_pos",function(data,status){});
+				button_data_up.innerHTML = 'Save Pos'
+			}
+
+		// stop
+		stop.ontouchstart = () => {
+						var button_data = document.getElementById('stop')
+						button_data.innerHTML = 'stop'
+					}
+		stop.ontouchend = () => {
+		const button_data_up = document.getElementById('stop')
+		$.post("/cmd","stop",function(data,status){});
+		button_data_up.innerHTML = 'Stop'
+	}
+
+		// plan
+		plan.ontouchstart = () => {
+						var button_data = document.getElementById('plan')
+						button_data.innerHTML = 'plan'
+					}
+		plan.ontouchend = () => {
+				const button_data_up = document.getElementById('plan')
+				$.post("/cmd","plan",function(data,status){});
+				button_data_up.innerHTML = 'Plan'
+			}
+		// create plan
+		create_plan.ontouchstart = () => {
+						var button_data = document.getElementById('createplan')
+						button_data.innerHTML = 'create plan'
+					}
+		create_plan.ontouchend = () => {
+		const button_data_up = document.getElementById('createplan')
+		$.post("/cmd","create_plan",function(data,status){});
+		button_data_up.innerHTML = 'Create Plan'
+	}
+
+		// save plan
+		save_plan.ontouchstart = () => {
+						var button_data = document.getElementById('saveplan')
+						button_data.innerHTML = 'save plan'
+					}
+		save_plan.ontouchend = () => {
+				const button_data_up = document.getElementById('saveplan')
+				$.post("/cmd","save_plan",function(data,status){});
+				button_data_up.innerHTML = 'Save Plan'
+			}
+
+
+		// speed
+		speed.onmousedown = () => {
+			if(flag == 0)
+			{
+			}
+			
+			document.getElementById('submit').value = document.getElementById('speed_value').value
+			
+		 }
+		speed.ontouchend = () => {
+				const button_data_up = document.getElementById('speed_value')
+				$.post("/cmd",document.getElementById('speed_value').value,function(data,status){});
+			}
+		}
+
+	// 	function hero()
+	// {
+	// var herowidth=400;//改为你要的网页宽度
+	// var heroheight=300;//改为你要的网页高度
+	// window.resizeTo(herowidth,heroheight);
+	// }
+	// hero();
+
+
+
+		// function drag(event){
+
+		// 	event.dataTransfer.setData("Text",event.target.id)
+
+		// 	// $.post("/cmd", document.getElementById('value').value, function(data,status){});
+		// 	}
+		
+	// // speed
+	// function judge()
+	// 	{ 
+	// 		const slider = document.getElementById('speed_value') 
+	// 		const slider_value = document.getElementById('submit') 
+	// 		slider_value.value = slider.value;
+	// 	};
+	// function drag(event){
+
+	// 			event.dataTransfer.setData("Text",event.target.id)
+				
+	// 		// $.post("/cmd", document.getElementById('value').value, function(data,status){});
+	// 			}
+
+		
+	});
+
+	// speed
+	function judge()
+		{ 
+			const slider = document.getElementById('speed_value') 
+			const slider_value = document.getElementById('submit') 
+			
+			slider_value.value = slider.value;
+		};
+	function drag(event){
+
+				event.dataTransfer.setData("Text",event.target.id)
+				
+			// $.post("/cmd", document.getElementById('value').value, function(data,status){});
+				}
+
+			function text_test(){ 
+
+				// var url1 = document.location.origin
+				// url = url1 + "/value"
+					var xx = window.frames("myframe").document.getElementById("bd").innerHTML;
+					document.getElementById("text11").value = xx;
+
+		// const slider = document.getElementById('speed_value') 
+		// const slider_value = document.getElementById('submit') 
+		
+		// slider_value.value = slider.value;
+	};
+		
+
+	var flag = 0;
+		var system ={};  
+		var p = navigator.platform;       
+		system.win = p.indexOf("Win") == 0;  
+		system.mac = p.indexOf("Mac") == 0;  
+		system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);     
+		if(system.win||system.xll){					//if PC
+			   window.location.href="#";  
+			   flag = 0;
+		}else{  //如果是手机,跳转到
+			  window.location.href="#";  
+			  flag = 1;
+		}
+		if(flag == 0)
+		{
+			document.onkeydown=function(){keyboard()}
+			document.onkeyup=function(){keyboard_none()}
+			
+		}
+	
+	 
+    </script>
+  
+	</html>
+	
