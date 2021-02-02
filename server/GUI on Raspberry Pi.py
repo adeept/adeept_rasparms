@@ -12,15 +12,7 @@ import time
 import threading as thread
 import tkinter as tk
 import info
-import switch
-import raspArmS
 
-screen = OLED.OLED_ctrl()
-screen.start()
-
-Switch_1 = 0
-Switch_2 = 0
-Switch_3 = 0
 
 def global_init():
 	global color_bg, color_text, color_btn, color_line, color_can, color_oval, target_color, speed, ip_stu
@@ -41,19 +33,19 @@ global_init()
 
 def move_buttons(x,y):
 	def savePos(event):
-		ras.newPlanAppend()
+		tcpClicSock.send(('Save Pos').encode())
 
 	def stop(event):
-		ras.moveThreadingStop()
+		tcpClicSock.send(('Stop').encode())
 
 	def plan(event):
-		ras.planThreadingStart()
+		tcpClicSock.send(('Plan').encode())
 
 	def createPlan(event):
-		ras.createNewPlan()
+		tcpClicSock.send(('Create Plan').encode())
 
 	def savePlan(event):
-		ras.savePlanJson()
+		tcpClicSock.send(('Save Plan').encode())
 
 	# root.bind('<KeyPress-q>', handup)
 	# root.bind('<KeyRelease-q>', servoStop)
@@ -120,34 +112,26 @@ def osd_screen(x,y):
 
 
 def switch_button(x,y):
+	global Btn_Switch_1, Btn_Switch_2, Btn_Switch_3
 	def call_Switch_1(event):
-		global Switch_1
 		if Switch_1 == 0:
-			switch.switch(1, 1)
-			Switch_1 = 1
+			tcpClicSock.send(('Switch_1_on').encode())
 		else:
-			switch.switch(1, 0)
-			Switch_1 = 0
+			tcpClicSock.send(('Switch_1_off').encode())
 
 
 	def call_Switch_2(event):
-		global Switch_2
 		if Switch_2 == 0:
-			switch.switch(2, 1)
-			Switch_2 = 1
+			tcpClicSock.send(('Switch_2_on').encode())
 		else:
-			switch.switch(2, 0)
-			Switch_2 = 0
+			tcpClicSock.send(('Switch_2_off').encode())
 
 
 	def call_Switch_3(event):
-		global Switch_3
 		if Switch_3 == 0:
-			switch.switch(3, 1)
-			Switch_3 = 1
+			tcpClicSock.send(('Switch_3_on').encode())
 		else:
-			switch.switch(3, 0)
-			Switch_3 = 0
+			tcpClicSock.send(('Switch_3_off').encode())
 
 	Btn_Switch_1 = tk.Button(root, width=6, text='Port 1',fg=color_text,bg=color_btn,relief='ridge')
 	Btn_Switch_2 = tk.Button(root, width=6, text='Port 2',fg=color_text,bg=color_btn,relief='ridge')
@@ -165,19 +149,18 @@ def switch_button(x,y):
 def scale_XYZ(x,y,w):
 	def X_send(event):
 		time.sleep(0.03)
-		ras.xyzInput([var_X.get(), var_Y.get(), var_Z.get(), var_G.get()])
+		tcpClicSock.send(('Xpos %s'%var_X.get()).encode())
 
 	def Y_send(event):
 		time.sleep(0.03)
-		ras.xyzInput([var_X.get(), var_Y.get(), var_Z.get(), var_G.get()])
+		tcpClicSock.send(('Ypos %s'%var_Y.get()).encode())
 
 	def Z_send(event):
 		time.sleep(0.03)
-		ras.xyzInput([var_X.get(), var_Y.get(), var_Z.get(), var_G.get()])
+		tcpClicSock.send(('Zpos %s'%var_Z.get()).encode())
 
 	def G_send(event):
-		time.sleep(0.03)
-		ras.xyzInput([var_X.get(), var_Y.get(), var_Z.get(), var_G.get()])
+		tcpClicSock.send(('Gpos %s'%var_G.get()).encode())
 
 
 	Scale_X = tk.Scale(root,label=None,
@@ -206,55 +189,43 @@ def scale_XYZ(x,y,w):
 
 def function_buttons(x,y):
 	def call_Xup(event):
-		ras.simpleMoveStart("X", "+")
-		var_X.set(ras.nowPos[0])
+		tcpClicSock.send(('X_add').encode())
 
 	def call_Xdo(event):
-		ras.simpleMoveStart("X", "-")
-		var_X.set(ras.nowPos[0])
+		tcpClicSock.send(('X_minus').encode())
 
 	def call_Xs(event):
-		ras.simpleMoveStart("X", "stop")
-		var_X.set(ras.nowPos[0])
+		tcpClicSock.send(('XS').encode())
 
 
 	def call_Yup(event):
-		ras.simpleMoveStart("Y", "+")
-		var_Y.set(ras.nowPos[1])
+		tcpClicSock.send(('Y_add').encode())
 
 	def call_Ydo(event):
-		ras.simpleMoveStart("Y", "-")
-		var_Y.set(ras.nowPos[1])
+		tcpClicSock.send(('Y_minus').encode())
 
 	def call_Ys(event):
-		ras.simpleMoveStart("Y", "stop")
-		var_Y.set(ras.nowPos[1])
+		tcpClicSock.send(('YS').encode())
 
 
 	def call_Zup(event):
-		ras.simpleMoveStart("Z", "+")
-		var_Z.set(ras.nowPos[2])
+		tcpClicSock.send(('Z_add').encode())
 
 	def call_Zdo(event):
-		ras.simpleMoveStart("Z", "-")
-		var_Z.set(ras.nowPos[2])
+		tcpClicSock.send(('Z_minus').encode())
 
 	def call_Zs(event):
-		ras.simpleMoveStart("Z", "stop")
-		var_Z.set(ras.nowPos[2])
+		tcpClicSock.send(('ZS').encode())
 
 
 	def call_Gup(event):
-		ras.simpleMoveStart("G", "+")
-		var_G.set(ras.nowPos[3])
+		tcpClicSock.send(('G_add').encode())
 
 	def call_Gdo(event):
-		ras.simpleMoveStart("G", "-")
-		var_G.set(ras.nowPos[3])
+		tcpClicSock.send(('G_minus').encode())
 
 	def call_Gs(event):
-		ras.simpleMoveStart("G", "stop")
-		var_G.set(ras.nowPos[3])
+		tcpClicSock.send(('GS').encode())
 
 
 	Btn_function_Xup = tk.Button(root, width=6, text='X+',fg=color_text,bg=color_btn,relief='ridge')

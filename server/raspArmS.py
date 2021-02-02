@@ -437,12 +437,7 @@ class RaspArmS(threading.Thread):
 
             # print([genX, genY, genZ, newXYZInput[3]])
             self.xyzInput([genX, genY, genZ, newXYZInput[3]])
-            # time.sleep(0.001/(self.moveSpeed+0.000001))
-            if self.moveSpeed == 100:
-                pass
-            else:
-                time.sleep(0.001/(self.moveSpeed+0.000001)*800)
-                # print(0.001/(self.moveSpeed+0.000001)*800)
+            time.sleep(0.1/(self.moveSpeed+0.000001))
 
         self.oldXYZ[0] = newXYZInput[0]
         self.oldXYZ[1] = newXYZInput[1]
@@ -479,21 +474,6 @@ class RaspArmS(threading.Thread):
 
 
     def xyzInput(self, xyzPosInput):
-        if xyzPosInput[0] < -100:
-            xyzPosInput[0] = -100
-        if xyzPosInput[0] > 100:
-            xyzPosInput[0] = 100
-
-        if xyzPosInput[1] < 50:
-            xyzPosInput[1] = 50
-        if xyzPosInput[1] > 150:
-            xyzPosInput[1] = 150
-
-        if xyzPosInput[2] < -100:
-            xyzPosInput[2] = -100
-        if xyzPosInput[2] > 100:
-            xyzPosInput[2] = 100
-
         allLengh = np.sqrt(xyzPosInput[0]*xyzPosInput[0] + xyzPosInput[1]*xyzPosInput[1])
         planeY   = allLengh - self.linkageLenA
         self.servoCtrl(self.initPosD, self.servoNumD, xyzPosInput[3], 1)
