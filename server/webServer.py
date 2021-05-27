@@ -5,14 +5,19 @@ import OLED
 import time
 import threading
 from RPi import GPIO
-from bottle import get,post,run,request,template,route, TEMPLATE_PATH
+
+# web
+import app
+import websockets
+import asyncio
+
 import socket
 import info
 import os
 import switch
 
 curpath = os.path.realpath(__file__)
-TEMPLATE_PATH.insert(0,'/'+ os.path.dirname(curpath))
+thisPath = "/" + os.path.dirname(curpath)
 
 clk = 19
 dt = 16
@@ -73,579 +78,579 @@ Switch_3 = 0
 
 
 def pathInit():
-	global pathLevel, pathSaved
-	pathLevel = 0
-	pathSaved = [0,0,0]
-	screen.screen_show(1, L0_text_1)
-	screen.screen_show(2, L0_text_2)
-	screen.screen_show(3, L0_text_3)
-	screen.screen_show(4, L0_text_4)
-	screen.screen_show(5, L0_text_5)
-	screen.screen_show(6, L0_text_6)
-	screen.screen_show(7, L0_text_7)
+    global pathLevel, pathSaved
+    pathLevel = 0
+    pathSaved = [0,0,0]
+    screen.screen_show(1, L0_text_1)
+    screen.screen_show(2, L0_text_2)
+    screen.screen_show(3, L0_text_3)
+    screen.screen_show(4, L0_text_4)
+    screen.screen_show(5, L0_text_5)
+    screen.screen_show(6, L0_text_6)
+    screen.screen_show(7, L0_text_7)
 
 
 def oledUpdate():
-	if pathLevel == 0:
-		if pathSaved[0] == 0:
-			INI1 = L0_text_1
-			INI2 = 'MODE SELECT'
-			INI3 = '.....................'
-			TL0_1 = 'XYZ CTRL   <<<'
-			TL0_2 = 'Servo CTRL '
-			TL0_3 = 'Plan CTRL  '
-		elif pathSaved[0] == 1:
-			INI1 = L0_text_1
-			INI2 = 'MODE SELECT'
-			INI3 = '.....................'
-			TL0_1 = 'XYZ CTRL   '
-			TL0_2 = 'Servo CTRL <<<'
-			TL0_3 = 'Plan CTRL  '
-		elif pathSaved[0] == 2:
-			INI1 = L0_text_1
-			INI2 = 'MODE SELECT'
-			INI3 = '.....................'
-			TL0_1 = 'XYZ CTRL   '
-			TL0_2 = 'Servo CTRL '
-			TL0_3 = 'Plan CTRL  <<<'
-		screen.screen_shows([1, 2, 3, 4, 5, 6], [INI1, INI2, INI3, TL0_1, TL0_2, TL0_3])
+    if pathLevel == 0:
+        if pathSaved[0] == 0:
+            INI1 = L0_text_1
+            INI2 = 'MODE SELECT'
+            INI3 = '.....................'
+            TL0_1 = 'XYZ CTRL   <<<'
+            TL0_2 = 'Servo CTRL '
+            TL0_3 = 'Plan CTRL  '
+        elif pathSaved[0] == 1:
+            INI1 = L0_text_1
+            INI2 = 'MODE SELECT'
+            INI3 = '.....................'
+            TL0_1 = 'XYZ CTRL   '
+            TL0_2 = 'Servo CTRL <<<'
+            TL0_3 = 'Plan CTRL  '
+        elif pathSaved[0] == 2:
+            INI1 = L0_text_1
+            INI2 = 'MODE SELECT'
+            INI3 = '.....................'
+            TL0_1 = 'XYZ CTRL   '
+            TL0_2 = 'Servo CTRL '
+            TL0_3 = 'Plan CTRL  <<<'
+        screen.screen_shows([1, 2, 3, 4, 5, 6], [INI1, INI2, INI3, TL0_1, TL0_2, TL0_3])
 
-	elif pathLevel == 1:
-		if pathSaved[0] == 0:
-			TL10_1 = 'MODE: XYZ CTRL'
-			TL10_2 = '.....................'
-			if pathSaved[1] == 0:
-				TL10_3 = 'X-AIXS <<<'
-				TL10_4 = 'Y-AIXS '
-				TL10_5 = 'Z-AIXS '
-				TL10_6 = 'G-AIXS '
-			elif pathSaved[1] == 1:
-				TL10_3 = 'X-AIXS '
-				TL10_4 = 'Y-AIXS <<<'
-				TL10_5 = 'Z-AIXS '
-				TL10_6 = 'G-AIXS '
-			elif pathSaved[1] == 2:
-				TL10_3 = 'X-AIXS '
-				TL10_4 = 'Y-AIXS '
-				TL10_5 = 'Z-AIXS <<<'
-				TL10_6 = 'G-AIXS '
-			elif pathSaved[1] == 3:
-				TL10_3 = 'X-AIXS '
-				TL10_4 = 'Y-AIXS '
-				TL10_5 = 'Z-AIXS '
-				TL10_6 = 'G-AIXS <<<'
+    elif pathLevel == 1:
+        if pathSaved[0] == 0:
+            TL10_1 = 'MODE: XYZ CTRL'
+            TL10_2 = '.....................'
+            if pathSaved[1] == 0:
+                TL10_3 = 'X-AIXS <<<'
+                TL10_4 = 'Y-AIXS '
+                TL10_5 = 'Z-AIXS '
+                TL10_6 = 'G-AIXS '
+            elif pathSaved[1] == 1:
+                TL10_3 = 'X-AIXS '
+                TL10_4 = 'Y-AIXS <<<'
+                TL10_5 = 'Z-AIXS '
+                TL10_6 = 'G-AIXS '
+            elif pathSaved[1] == 2:
+                TL10_3 = 'X-AIXS '
+                TL10_4 = 'Y-AIXS '
+                TL10_5 = 'Z-AIXS <<<'
+                TL10_6 = 'G-AIXS '
+            elif pathSaved[1] == 3:
+                TL10_3 = 'X-AIXS '
+                TL10_4 = 'Y-AIXS '
+                TL10_5 = 'Z-AIXS '
+                TL10_6 = 'G-AIXS <<<'
 
-		elif pathSaved[0] == 1:
-			TL10_1 = 'MODE: SERVO CTRL'
-			TL10_2 = '.....................'
-			if pathSaved[1] == 0:
-				TL10_3 = 'A-SERVO <<<'
-				TL10_4 = 'B-SERVO '
-				TL10_5 = 'C-SERVO '
-				TL10_6 = 'D-SERVO '
-			elif pathSaved[1] == 1:
-				TL10_3 = 'A-SERVO '
-				TL10_4 = 'B-SERVO <<<'
-				TL10_5 = 'C-SERVO '
-				TL10_6 = 'D-SERVO '
-			elif pathSaved[1] == 2:
-				TL10_3 = 'A-SERVO '
-				TL10_4 = 'B-SERVO '
-				TL10_5 = 'C-SERVO <<<'
-				TL10_6 = 'D-SERVO '
-			elif pathSaved[1] == 3:
-				TL10_3 = 'A-SERVO '
-				TL10_4 = 'B-SERVO '
-				TL10_5 = 'C-SERVO '
-				TL10_6 = 'D-SERVO <<<'
+        elif pathSaved[0] == 1:
+            TL10_1 = 'MODE: SERVO CTRL'
+            TL10_2 = '.....................'
+            if pathSaved[1] == 0:
+                TL10_3 = 'A-SERVO <<<'
+                TL10_4 = 'B-SERVO '
+                TL10_5 = 'C-SERVO '
+                TL10_6 = 'D-SERVO '
+            elif pathSaved[1] == 1:
+                TL10_3 = 'A-SERVO '
+                TL10_4 = 'B-SERVO <<<'
+                TL10_5 = 'C-SERVO '
+                TL10_6 = 'D-SERVO '
+            elif pathSaved[1] == 2:
+                TL10_3 = 'A-SERVO '
+                TL10_4 = 'B-SERVO '
+                TL10_5 = 'C-SERVO <<<'
+                TL10_6 = 'D-SERVO '
+            elif pathSaved[1] == 3:
+                TL10_3 = 'A-SERVO '
+                TL10_4 = 'B-SERVO '
+                TL10_5 = 'C-SERVO '
+                TL10_6 = 'D-SERVO <<<'
 
-		elif pathSaved[0] == 2:
-			TL10_1 = 'MODE: PLAN CTRL'
-			TL10_2 = '.....................'
-			if pathSaved[1] == 0:
-				TL10_3 = 'PLAN START <<<'
-				TL10_4 = 'CREATE NEW '
-				TL10_5 = ' '
-				TL10_6 = ' '
-			elif pathSaved[1] == 1:
-				TL10_3 = 'PLAN START '
-				TL10_4 = 'CREATE NEW <<<'
-				TL10_5 = ' '
-				TL10_6 = ' '
+        elif pathSaved[0] == 2:
+            TL10_1 = 'MODE: PLAN CTRL'
+            TL10_2 = '.....................'
+            if pathSaved[1] == 0:
+                TL10_3 = 'PLAN START <<<'
+                TL10_4 = 'CREATE NEW '
+                TL10_5 = ' '
+                TL10_6 = ' '
+            elif pathSaved[1] == 1:
+                TL10_3 = 'PLAN START '
+                TL10_4 = 'CREATE NEW <<<'
+                TL10_5 = ' '
+                TL10_6 = ' '
 
-		screen.screen_shows([1, 2, 3, 4, 5, 6], [TL10_1, TL10_2, TL10_3, TL10_4, TL10_5, TL10_6])
+        screen.screen_shows([1, 2, 3, 4, 5, 6], [TL10_1, TL10_2, TL10_3, TL10_4, TL10_5, TL10_6])
 
 
-	elif pathLevel == 2:
-		TL10_1 = 'MODE: XYZ CTRL'
-		TL10_2 = '.....................'
-		if pathSaved[2] == 0:
-			TL10_3 = 'X-AIXS <<<'
-			TL10_4 = 'Y-AIXS '
-			TL10_5 = 'Z-AIXS '
-			TL10_6 = 'G-AIXS '
-		elif pathSaved[2] == 1:
-			TL10_3 = 'X-AIXS '
-			TL10_4 = 'Y-AIXS <<<'
-			TL10_5 = 'Z-AIXS '
-			TL10_6 = 'G-AIXS '
-		elif pathSaved[2] == 2:
-			TL10_3 = 'X-AIXS '
-			TL10_4 = 'Y-AIXS '
-			TL10_5 = 'Z-AIXS <<<'
-			TL10_6 = 'G-AIXS '
-		elif pathSaved[2] == 3:
-			TL10_3 = 'X-AIXS '
-			TL10_4 = 'Y-AIXS '
-			TL10_5 = 'Z-AIXS '
-			TL10_6 = 'G-AIXS <<<'
+    elif pathLevel == 2:
+        TL10_1 = 'MODE: XYZ CTRL'
+        TL10_2 = '.....................'
+        if pathSaved[2] == 0:
+            TL10_3 = 'X-AIXS <<<'
+            TL10_4 = 'Y-AIXS '
+            TL10_5 = 'Z-AIXS '
+            TL10_6 = 'G-AIXS '
+        elif pathSaved[2] == 1:
+            TL10_3 = 'X-AIXS '
+            TL10_4 = 'Y-AIXS <<<'
+            TL10_5 = 'Z-AIXS '
+            TL10_6 = 'G-AIXS '
+        elif pathSaved[2] == 2:
+            TL10_3 = 'X-AIXS '
+            TL10_4 = 'Y-AIXS '
+            TL10_5 = 'Z-AIXS <<<'
+            TL10_6 = 'G-AIXS '
+        elif pathSaved[2] == 3:
+            TL10_3 = 'X-AIXS '
+            TL10_4 = 'Y-AIXS '
+            TL10_5 = 'Z-AIXS '
+            TL10_6 = 'G-AIXS <<<'
 
-		screen.screen_shows([1, 2, 3, 4, 5, 6], [TL10_1, TL10_2, TL10_3, TL10_4, TL10_5, TL10_6])
+        screen.screen_shows([1, 2, 3, 4, 5, 6], [TL10_1, TL10_2, TL10_3, TL10_4, TL10_5, TL10_6])
 
-	# print(pathLevel)
-	# print(pathSaved)
-	pass
+    # print(pathLevel)
+    # print(pathSaved)
+    pass
 
 
 def showPressTime(pressInput):
-	showTimeText = ''
-	if pressInput == '0':
-		pass
-	elif pressInput == 'I':
-		showTimeText = '+++++++++++++++++++++'
-		if pathLevel == 0:
-			screen.screen_show(3, showTimeText)
-		else:
-			screen.screen_show(2, showTimeText)
-	elif pressInput == 'II':
-		showTimeText = 'XXXXXXXXXXXXXXXXXXXXX'
-		if pathLevel == 0:
-			screen.screen_show(3, showTimeText)
-		else:
-			screen.screen_show(2, showTimeText)
-	pass
+    showTimeText = ''
+    if pressInput == '0':
+        pass
+    elif pressInput == 'I':
+        showTimeText = '+++++++++++++++++++++'
+        if pathLevel == 0:
+            screen.screen_show(3, showTimeText)
+        else:
+            screen.screen_show(2, showTimeText)
+    elif pressInput == 'II':
+        showTimeText = 'XXXXXXXXXXXXXXXXXXXXX'
+        if pathLevel == 0:
+            screen.screen_show(3, showTimeText)
+        else:
+            screen.screen_show(2, showTimeText)
+    pass
 
 
 def pathCtrl(command):
-	global pathLevel, pathSaved
-	if command == '1':
-		if pathLevel == 0:
-			pathSaved[0] += 1
-			if pathSaved[0] >= L0:
-				pathSaved[0] = 0
-			time.sleep(0.05)
+    global pathLevel, pathSaved
+    if command == '1':
+        if pathLevel == 0:
+            pathSaved[0] += 1
+            if pathSaved[0] >= L0:
+                pathSaved[0] = 0
+            time.sleep(0.05)
 
-		elif pathLevel == 1:
-			if pathSaved[0] == 0:
-				if pathSaved[1] == 0:
-					aimXYZ[0] += ctrlSpeed
+        elif pathLevel == 1:
+            if pathSaved[0] == 0:
+                if pathSaved[1] == 0:
+                    aimXYZ[0] += ctrlSpeed
 
-				elif pathSaved[1] == 1:
-					aimXYZ[1] += ctrlSpeed
+                elif pathSaved[1] == 1:
+                    aimXYZ[1] += ctrlSpeed
 
-				elif pathSaved[1] == 2:
-					aimXYZ[2] += ctrlSpeed
+                elif pathSaved[1] == 2:
+                    aimXYZ[2] += ctrlSpeed
 
-				elif pathSaved[1] == 3:
-					aimXYZ[3] += ctrlSpeed
+                elif pathSaved[1] == 3:
+                    aimXYZ[3] += ctrlSpeed
 
-				ras.xyzInput(aimXYZ)
+                ras.xyzInput(aimXYZ)
 
-			elif pathSaved[0] == 1: 
-				if pathSaved[1] == 0:
-					servoAng[0] += ctrlSpeed
+            elif pathSaved[0] == 1: 
+                if pathSaved[1] == 0:
+                    servoAng[0] += ctrlSpeed
 
-				elif pathSaved[1] == 1:
-					servoAng[1] += ctrlSpeed
+                elif pathSaved[1] == 1:
+                    servoAng[1] += ctrlSpeed
 
-				elif pathSaved[1] == 2:
-					servoAng[2] += ctrlSpeed
+                elif pathSaved[1] == 2:
+                    servoAng[2] += ctrlSpeed
 
-				elif pathSaved[1] == 3:
-					servoAng[3] += ctrlSpeed
+                elif pathSaved[1] == 3:
+                    servoAng[3] += ctrlSpeed
 
-				ras.servoAngInput(servoAng)
+                ras.servoAngInput(servoAng)
 
-			elif pathSaved[0] == 2:
-				if pathSaved[1] == 0:
-					pathSaved[1] = 1
-				else:
-					pathSaved[1] = 0
+            elif pathSaved[0] == 2:
+                if pathSaved[1] == 0:
+                    pathSaved[1] = 1
+                else:
+                    pathSaved[1] = 0
 
-		elif pathLevel == 2:
-			if pathSaved[2] == 0:
-				aimXYZ[0] += ctrlSpeed
-			elif pathSaved[2] == 1:
-				aimXYZ[1] += ctrlSpeed
-			elif pathSaved[2] == 2:
-				aimXYZ[2] += ctrlSpeed
-			elif pathSaved[2] == 3:
-				aimXYZ[3] += ctrlSpeed
+        elif pathLevel == 2:
+            if pathSaved[2] == 0:
+                aimXYZ[0] += ctrlSpeed
+            elif pathSaved[2] == 1:
+                aimXYZ[1] += ctrlSpeed
+            elif pathSaved[2] == 2:
+                aimXYZ[2] += ctrlSpeed
+            elif pathSaved[2] == 3:
+                aimXYZ[3] += ctrlSpeed
 
-			ras.xyzInput(aimXYZ)
+            ras.xyzInput(aimXYZ)
 
-	elif command == '-1':
-		if pathLevel == 0:
-			pathSaved[0] -= 1
-			if pathSaved[0] < 0:
-				pathSaved[0] = L0 - 1
-			time.sleep(0.05)
+    elif command == '-1':
+        if pathLevel == 0:
+            pathSaved[0] -= 1
+            if pathSaved[0] < 0:
+                pathSaved[0] = L0 - 1
+            time.sleep(0.05)
 
-		elif pathLevel == 1:
-			if pathSaved[0] == 0:
-				if pathSaved[1] == 0:
-					aimXYZ[0] -= ctrlSpeed
+        elif pathLevel == 1:
+            if pathSaved[0] == 0:
+                if pathSaved[1] == 0:
+                    aimXYZ[0] -= ctrlSpeed
 
-				elif pathSaved[1] == 1:
-					aimXYZ[1] -= ctrlSpeed
+                elif pathSaved[1] == 1:
+                    aimXYZ[1] -= ctrlSpeed
 
-				elif pathSaved[1] == 2:
-					aimXYZ[2] -= ctrlSpeed
+                elif pathSaved[1] == 2:
+                    aimXYZ[2] -= ctrlSpeed
 
-				elif pathSaved[1] == 3:
-					aimXYZ[3] -= ctrlSpeed
+                elif pathSaved[1] == 3:
+                    aimXYZ[3] -= ctrlSpeed
 
-				ras.xyzInput(aimXYZ)
+                ras.xyzInput(aimXYZ)
 
-			elif pathSaved[0] == 1: 
-				if pathSaved[1] == 0:
-					servoAng[0] -= ctrlSpeed
-				elif pathSaved[1] == 1:
-					servoAng[1] -= ctrlSpeed
-				elif pathSaved[1] == 2:
-					servoAng[2] -= ctrlSpeed
-				elif pathSaved[1] == 3:
-					servoAng[3] -= ctrlSpeed
+            elif pathSaved[0] == 1: 
+                if pathSaved[1] == 0:
+                    servoAng[0] -= ctrlSpeed
+                elif pathSaved[1] == 1:
+                    servoAng[1] -= ctrlSpeed
+                elif pathSaved[1] == 2:
+                    servoAng[2] -= ctrlSpeed
+                elif pathSaved[1] == 3:
+                    servoAng[3] -= ctrlSpeed
 
-				ras.servoAngInput(servoAng)
+                ras.servoAngInput(servoAng)
 
-			elif pathSaved[0] == 2:
-				if pathSaved[1] == 0:
-					pathSaved[1] = 1
-				else:
-					pathSaved[1] = 0
+            elif pathSaved[0] == 2:
+                if pathSaved[1] == 0:
+                    pathSaved[1] = 1
+                else:
+                    pathSaved[1] = 0
 
-		elif pathLevel == 2:
-			if pathSaved[2] == 0:
-				aimXYZ[0] -= ctrlSpeed
-			elif pathSaved[2] == 1:
-				aimXYZ[1] -= ctrlSpeed
-			elif pathSaved[2] == 2:
-				aimXYZ[2] -= ctrlSpeed
-			elif pathSaved[2] == 3:
-				aimXYZ[3] -= ctrlSpeed
+        elif pathLevel == 2:
+            if pathSaved[2] == 0:
+                aimXYZ[0] -= ctrlSpeed
+            elif pathSaved[2] == 1:
+                aimXYZ[1] -= ctrlSpeed
+            elif pathSaved[2] == 2:
+                aimXYZ[2] -= ctrlSpeed
+            elif pathSaved[2] == 3:
+                aimXYZ[3] -= ctrlSpeed
 
-			ras.xyzInput(aimXYZ)
+            ras.xyzInput(aimXYZ)
 
-	elif command == 'Press0':
-		if pathLevel == 0:
-			pathLevel += 1
+    elif command == 'Press0':
+        if pathLevel == 0:
+            pathLevel += 1
 
-		elif pathLevel == 1:
-			if pathSaved[0] == 0:
-				pathSaved[1] += 1
-				if pathSaved[1] >= L10:
-					pathSaved[1] = 0
+        elif pathLevel == 1:
+            if pathSaved[0] == 0:
+                pathSaved[1] += 1
+                if pathSaved[1] >= L10:
+                    pathSaved[1] = 0
 
-			elif pathSaved[0] == 1:
-				pathSaved[1] += 1
-				if pathSaved[1] >= L11:
-					pathSaved[1] = 0
+            elif pathSaved[0] == 1:
+                pathSaved[1] += 1
+                if pathSaved[1] >= L11:
+                    pathSaved[1] = 0
 
-			elif pathSaved[0] == 2:
-				if pathSaved[1] > 2:
-					pathSaved[1] = 0
+            elif pathSaved[0] == 2:
+                if pathSaved[1] > 2:
+                    pathSaved[1] = 0
 
-				if pathSaved[1] == 0:
-					ras.planGoes(ras.planData)
-				elif pathSaved[1] == 1:
-					ras.createNewPlan()
-					pathLevel += 1
+                if pathSaved[1] == 0:
+                    ras.planGoes(ras.planData)
+                elif pathSaved[1] == 1:
+                    ras.createNewPlan()
+                    pathLevel += 1
 
-		elif pathLevel == 2:
-			pathSaved[2] += 1
-			if pathSaved[2] > L120:
-				pathSaved[2] = 0
-				print(pathSaved[2])
+        elif pathLevel == 2:
+            pathSaved[2] += 1
+            if pathSaved[2] > L120:
+                pathSaved[2] = 0
+                print(pathSaved[2])
 
-		oledUpdate()
+        oledUpdate()
 
-	elif command == 'PressI':
-		if pathLevel == 0:
-			pass
+    elif command == 'PressI':
+        if pathLevel == 0:
+            pass
 
-		elif pathLevel == 1:
-			pathLevel -= 1
+        elif pathLevel == 1:
+            pathLevel -= 1
 
-		elif pathLevel == 2:
-			ras.newPlanAppend()
+        elif pathLevel == 2:
+            ras.newPlanAppend()
 
-		oledUpdate()
-
-
-	elif command == 'PressII':
-		if pathLevel == 2:
-			ras.savePlanJson()
-		pathLevel = 0
-		pathInit()
-		time.sleep(0.2)
-
-		oledUpdate()
+        oledUpdate()
 
 
-	if pathLevel == 1 and pathSaved[1] != 2:
-		pass
-	else:
-		oledUpdate()
+    elif command == 'PressII':
+        if pathLevel == 2:
+            ras.savePlanJson()
+        pathLevel = 0
+        pathInit()
+        time.sleep(0.2)
+
+        oledUpdate()
+
+
+    if pathLevel == 1 and pathSaved[1] != 2:
+        pass
+    else:
+        oledUpdate()
 
 
 def rotaryInput():
-	global clkLastState, old_number, number
-	while 1:
-		if GPIO.wait_for_edge(clk, GPIO.FALLING):
-			clkState = GPIO.input(clk)
-			dtState = GPIO.input(dt)
-			if clkState != clkLastState:
-				if dtState != clkState:
-					number -= 1
-					# menuCtrl('-1')
-					pathCtrl('-1')
-				else:
-					number += 1
-					# menuCtrl('1')
-					pathCtrl('1')
-			clkLastState = clkState
-			if number != old_number:
-				old_number = number
-				time.sleep(0)
+    global clkLastState, old_number, number
+    while 1:
+        if GPIO.wait_for_edge(clk, GPIO.FALLING):
+            clkState = GPIO.input(clk)
+            dtState = GPIO.input(dt)
+            if clkState != clkLastState:
+                if dtState != clkState:
+                    number -= 1
+                    # menuCtrl('-1')
+                    pathCtrl('-1')
+                else:
+                    number += 1
+                    # menuCtrl('1')
+                    pathCtrl('1')
+            clkLastState = clkState
+            if number != old_number:
+                old_number = number
+                time.sleep(0)
 
 
 def buttonInput():
-	while 1:
-		if not GPIO.input(btn):
-			timeCount = 0
-			while not GPIO.input(btn):
-				timeCount += 1
-				if timeCount >= PressI:
-					showPressTime('I')
-					break
-				time.sleep(0.1)
+    while 1:
+        if not GPIO.input(btn):
+            timeCount = 0
+            while not GPIO.input(btn):
+                timeCount += 1
+                if timeCount >= PressI:
+                    showPressTime('I')
+                    break
+                time.sleep(0.1)
 
-			while not GPIO.input(btn):
-				timeCount += 1
-				if timeCount >= PressII:
-					showPressTime('II')
-					pathCtrl('PressII')
-					while not GPIO.input(btn):
-						pass
-					break
-				time.sleep(0.1)
+            while not GPIO.input(btn):
+                timeCount += 1
+                if timeCount >= PressII:
+                    showPressTime('II')
+                    pathCtrl('PressII')
+                    while not GPIO.input(btn):
+                        pass
+                    break
+                time.sleep(0.1)
 
-			if timeCount > PressI:
-				pathCtrl('PressI')
-			else:
-				pathCtrl('Press0')
-		time.sleep(0.1)
+            if timeCount > PressI:
+                pathCtrl('PressI')
+            else:
+                pathCtrl('Press0')
+        time.sleep(0.1)
 
 
 def info_send_client():
-	SERVER_IP = addr[0]
-	SERVER_PORT = 2256   #Define port serial 
-	SERVER_ADDR = (SERVER_IP, SERVER_PORT)
-	Info_Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Set connection value for socket
-	Info_Socket.connect(SERVER_ADDR)
-	print(SERVER_ADDR)
-	while 1:
-		try:
-			Info_Socket.send((info.get_cpu_tempfunc()+' '+info.get_cpu_use()+' '+info.get_ram_info()+' '+str(ras.nowPos[0])+' '+str(ras.nowPos[1])+' '+str(ras.nowPos[2])+' '+str(ras.nowPos[3])).encode())
-			time.sleep(1)
-		except:
-			time.sleep(10)
-			pass
+    SERVER_IP = addr[0]
+    SERVER_PORT = 2256   #Define port serial 
+    SERVER_ADDR = (SERVER_IP, SERVER_PORT)
+    Info_Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Set connection value for socket
+    Info_Socket.connect(SERVER_ADDR)
+    print(SERVER_ADDR)
+    while 1:
+        try:
+            Info_Socket.send((info.get_cpu_tempfunc()+' '+info.get_cpu_use()+' '+info.get_ram_info()+' '+str(ras.nowPos[0])+' '+str(ras.nowPos[1])+' '+str(ras.nowPos[2])+' '+str(ras.nowPos[3])).encode())
+            time.sleep(1)
+        except:
+            time.sleep(10)
+            pass
 
 
 def  ap_thread():
-	os.system("sudo create_ap wlan0 eth0 MyRobot 12345678")
+    os.system("sudo create_ap wlan0 eth0 MyRobot 12345678")
 
 
 def runTcp():
-	global Switch_1, Switch_2, Switch_3
-	speed_set = 100
-	posBuffer = [0,50,0,0]
+    global Switch_1, Switch_2, Switch_3
+    speed_set = 100
+    posBuffer = [0,50,0,0]
 
-	info_threading=threading.Thread(target=info_send_client)    #Define a thread for FPV and OpenCV
-	info_threading.setDaemon(True)                             #'True' means it is a front thread,it would close when the mainloop() closes
-	info_threading.start()                                     #Thread starts
+    info_threading=threading.Thread(target=info_send_client)    #Define a thread for FPV and OpenCV
+    info_threading.setDaemon(True)                             #'True' means it is a front thread,it would close when the mainloop() closes
+    info_threading.start()                                     #Thread starts
 
-	while True: 
-		data = ''
-		data = str(tcpCliSock.recv(BUFSIZ).decode())
-		if not data:
-			continue
+    while True: 
+        data = ''
+        data = str(tcpCliSock.recv(BUFSIZ).decode())
+        if not data:
+            continue
 
-		elif 'X_minus' == data:
-			ras.simpleMoveStart("X", "-")
-		elif 'X_add' == data:
-			ras.simpleMoveStart("X", "+")
-		elif 'XS' in data:
-			ras.simpleMoveStart("X", "stop")
+        elif 'X_minus' == data:
+            ras.simpleMoveStart("X", "-")
+        elif 'X_add' == data:
+            ras.simpleMoveStart("X", "+")
+        elif 'XS' in data:
+            ras.simpleMoveStart("X", "stop")
 
-		elif 'Y_minus' == data:
-			ras.simpleMoveStart("Y", "-")
-		elif 'Y_add' == data:
-			ras.simpleMoveStart("Y", "+")
-		elif 'YS' in data:
-			ras.simpleMoveStart("Y", "stop")
+        elif 'Y_minus' == data:
+            ras.simpleMoveStart("Y", "-")
+        elif 'Y_add' == data:
+            ras.simpleMoveStart("Y", "+")
+        elif 'YS' in data:
+            ras.simpleMoveStart("Y", "stop")
 
-		elif 'Z_minus' == data:
-			ras.simpleMoveStart("Z", "-")
-		elif 'Z_add' == data:
-			ras.simpleMoveStart("Z", "+")
-		elif 'ZS' in data:
-			ras.simpleMoveStart("Z", "stop")
+        elif 'Z_minus' == data:
+            ras.simpleMoveStart("Z", "-")
+        elif 'Z_add' == data:
+            ras.simpleMoveStart("Z", "+")
+        elif 'ZS' in data:
+            ras.simpleMoveStart("Z", "stop")
 
-		elif 'G_minus' == data:
-			ras.simpleMoveStart("G", "-")
-			# ras.gripper('catch')
-		elif 'G_add' == data:
-			ras.simpleMoveStart("G", "+")
-			# ras.gripper('loose')
-		elif 'GS' in data:
-			ras.simpleMoveStart("G", "stop")
-
-
-		elif 'Save Pos' == data:
-			ras.newPlanAppend()
-			time.sleep(0.5)
-		elif 'Stop' == data:
-			ras.moveThreadingStop()
-		elif 'Create Plan' == data:
-			ras.createNewPlan()
-		elif 'Plan' == data:
-			ras.planThreadingStart()
-		elif 'Save Plan' == data:
-			ras.savePlanJson()
-
-		elif 'Switch_1' == data:
-			if Switch_1:
-				switch.switch(1, 0)
-				Switch_1 = 0
-			else:
-				switch.switch(1, 1)
-				Switch_1 = 1
-
-		elif 'Switch_2' == data:
-			if Switch_2:
-				switch.switch(2, 0)
-				Switch_2 = 0
-			else:
-				switch.switch(2, 1)
-				Switch_2 = 1
-
-		elif 'Switch_3' == data:
-			if Switch_3:
-				switch.switch(3, 0)
-				Switch_3 = 0
-			else:
-				switch.switch(3, 1)
-				Switch_3 = 1
+        elif 'G_minus' == data:
+            ras.simpleMoveStart("G", "-")
+            # ras.gripper('catch')
+        elif 'G_add' == data:
+            ras.simpleMoveStart("G", "+")
+            # ras.gripper('loose')
+        elif 'GS' in data:
+            ras.simpleMoveStart("G", "stop")
 
 
-		elif 'Xpos' in data:
-			try:
-				pos = int(data.split()[1])
-				ras.nowPos[0] = pos
-				ras.xyzInput(ras.nowPos)
-			except:
-				pass
+        elif 'Save Pos' == data:
+            ras.newPlanAppend()
+            time.sleep(0.5)
+        elif 'Stop' == data:
+            ras.moveThreadingStop()
+        elif 'Create Plan' == data:
+            ras.createNewPlan()
+        elif 'Plan' == data:
+            ras.planThreadingStart()
+        elif 'Save Plan' == data:
+            ras.savePlanJson()
 
-		elif 'Ypos' in data:
-			try:
-				pos = int(data.split()[1])
-				ras.nowPos[1] = pos
-				ras.xyzInput(ras.nowPos)
-			except:
-				pass
+        elif 'Switch_1' == data:
+            if Switch_1:
+                switch.switch(1, 0)
+                Switch_1 = 0
+            else:
+                switch.switch(1, 1)
+                Switch_1 = 1
 
-		elif 'Zpos' in data:
-			try:
-				pos = int(data.split()[1])
-				ras.nowPos[2] = pos
-				ras.xyzInput(ras.nowPos)
-			except:
-				pass
+        elif 'Switch_2' == data:
+            if Switch_2:
+                switch.switch(2, 0)
+                Switch_2 = 0
+            else:
+                switch.switch(2, 1)
+                Switch_2 = 1
 
-		elif 'Gpos' in data:
-			try:
-				pos = int(data.split()[1])
-				ras.nowPos[3] = pos
-				ras.xyzInput(ras.nowPos)
-			except:
-				pass
+        elif 'Switch_3' == data:
+            if Switch_3:
+                switch.switch(3, 0)
+                Switch_3 = 0
+            else:
+                switch.switch(3, 1)
+                Switch_3 = 1
 
 
-		# print(ras.nowPos)
+        elif 'Xpos' in data:
+            try:
+                pos = int(data.split()[1])
+                ras.nowPos[0] = pos
+                ras.xyzInput(ras.nowPos)
+            except:
+                pass
+
+        elif 'Ypos' in data:
+            try:
+                pos = int(data.split()[1])
+                ras.nowPos[1] = pos
+                ras.xyzInput(ras.nowPos)
+            except:
+                pass
+
+        elif 'Zpos' in data:
+            try:
+                pos = int(data.split()[1])
+                ras.nowPos[2] = pos
+                ras.xyzInput(ras.nowPos)
+            except:
+                pass
+
+        elif 'Gpos' in data:
+            try:
+                pos = int(data.split()[1])
+                ras.nowPos[3] = pos
+                ras.xyzInput(ras.nowPos)
+            except:
+                pass
+
+
+        # print(ras.nowPos)
 
 
 def wifi_check():
-	global L0_text_1
-	try:
-		s =socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		s.connect(("1.1.1.1",80))
-		ipaddr_check=s.getsockname()[0]
-		s.close()
-		print(ipaddr_check)
-		L0_text_1 = 'IP:'+ipaddr_check+' '
-		oledUpdate()
-		# screen.screen_show(2, 'IP:'+ipaddr_check)
-		# screen.screen_show(3, 'AP MODE OFF')
-	except:
-		ap_threading=threading.Thread(target=ap_thread)   #Define a thread for data receiving
-		ap_threading.setDaemon(True)                          #'True' means it is a front thread,it would close when the mainloop() closes
-		ap_threading.start()                                  #Thread starts
+    global L0_text_1
+    try:
+        s =socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        s.connect(("1.1.1.1",80))
+        ipaddr_check=s.getsockname()[0]
+        s.close()
+        print(ipaddr_check)
+        L0_text_1 = 'IP:'+ipaddr_check+' '
+        oledUpdate()
+        # screen.screen_show(2, 'IP:'+ipaddr_check)
+        # screen.screen_show(3, 'AP MODE OFF')
+    except:
+        ap_threading=threading.Thread(target=ap_thread)   #Define a thread for data receiving
+        ap_threading.setDaemon(True)                          #'True' means it is a front thread,it would close when the mainloop() closes
+        ap_threading.start()                                  #Thread starts
 
 
 def tcpConnection():
-	global tcpSerSock, tcpCliSock, addr, BUFSIZ
-	while 1:
-		HOST = ''
-		PORT = 10223                              #Define port serial 
-		BUFSIZ = 1024                             #Define buffer size
-		ADDR = (HOST, PORT)
+    global tcpSerSock, tcpCliSock, addr, BUFSIZ
+    while 1:
+        HOST = ''
+        PORT = 10223                              #Define port serial 
+        BUFSIZ = 1024                             #Define buffer size
+        ADDR = (HOST, PORT)
 
-		while  1:
-			wifi_check()
-			try:
-				tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				tcpSerSock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-				tcpSerSock.bind(ADDR)
-				tcpSerSock.listen(5)                      #Start server,waiting for client
-				print('waiting for connection...')
-				tcpCliSock, addr = tcpSerSock.accept()
-				print('...connected from :', addr)
-				break
-			except:
-				pass
+        while  1:
+            wifi_check()
+            try:
+                tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                tcpSerSock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+                tcpSerSock.bind(ADDR)
+                tcpSerSock.listen(5)                      #Start server,waiting for client
+                print('waiting for connection...')
+                tcpCliSock, addr = tcpSerSock.accept()
+                print('...connected from :', addr)
+                break
+            except:
+                pass
 
-		try:
-			runTcp()
-		except Exception as e:
-			print(e)
+        try:
+            runTcp()
+        except Exception as e:
+            print(e)
 
-		time.sleep(1)
+        time.sleep(1)
 
 
 def ipUpdate():
-	global L0_text_1
-	while 1:
-		s =socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		s.connect(("1.1.1.1",80))
-		ipaddr_check=s.getsockname()[0]
-		s.close()
-		print(ipaddr_check)
-		L0_text_1 = 'IP:'+ipaddr_check+' '
-		oledUpdate()
-		time.sleep(15)
+    global L0_text_1
+    while 1:
+        s =socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        s.connect(("1.1.1.1",80))
+        ipaddr_check=s.getsockname()[0]
+        s.close()
+        print(ipaddr_check)
+        L0_text_1 = 'IP:'+ipaddr_check+' '
+        oledUpdate()
+        time.sleep(15)
 
 
 rotaryInputThreading=threading.Thread(target=ipUpdate)
@@ -669,79 +674,128 @@ buttonInputThreading.start()
 
 
 def webserver(command):
-	if command.isdigit():
-		print(int(command))
-		ras.changeSpeed(int(command))
-	else:
-		if command == "X_add":
-			ras.simpleMoveStart("X", "+")
-		elif command == "X_minus":
-			ras.simpleMoveStart("X", "-")
-		elif command == "XS":
-			ras.simpleMoveStart("X", "stop")
+    if command.isdigit():
+        print(int(command))
+        ras.changeSpeed(int(command))
+    else:
+        if command == "X_add":
+            ras.simpleMoveStart("X", "+")
+        elif command == "X_minus":
+            ras.simpleMoveStart("X", "-")
+        elif command == "XS":
+            ras.simpleMoveStart("X", "stop")
 
-		elif command == 'Y_add':
-			ras.simpleMoveStart("Y", "+")
-		elif command == 'Y_minus':
-			ras.simpleMoveStart("Y", "-")
-		elif command == 'YS':
-			ras.simpleMoveStart("Y", "stop")
+        elif command == 'Y_add':
+            ras.simpleMoveStart("Y", "+")
+        elif command == 'Y_minus':
+            ras.simpleMoveStart("Y", "-")
+        elif command == 'YS':
+            ras.simpleMoveStart("Y", "stop")
 
-		elif 'Z_minus' == command:
-			ras.simpleMoveStart("Z", "-")
-		elif 'Z_add' == command:
-			ras.simpleMoveStart("Z", "+")
-		elif 'ZS' in command:
-			ras.simpleMoveStart("Z", "stop")
+        elif 'Z_minus' == command:
+            ras.simpleMoveStart("Z", "-")
+        elif 'Z_add' == command:
+            ras.simpleMoveStart("Z", "+")
+        elif 'ZS' in command:
+            ras.simpleMoveStart("Z", "stop")
 
-		elif 'G_minus' == command:
-			ras.simpleMoveStart("G", "-")
-			# ras.gripper('catch')
-		elif 'G_add' == command:
-			ras.simpleMoveStart("G", "+")
-			# ras.gripper('loose')
-		elif 'GS' in command:
-			ras.simpleMoveStart("G", "stop")
-
-
-		elif 'save_pos' == command:
-			ras.newPlanAppend()
-			time.sleep(0.5)
-		elif 'stop' == command:
-			ras.moveThreadingStop()
-		elif 'create_Plan' == command:
-			ras.createNewPlan()
-		elif 'plan' == command:
-			ras.planThreadingStart()
-		elif 'save_Plan' == command:
-			ras.savePlanJson()
+        elif 'G_minus' == command:
+            ras.simpleMoveStart("G", "-")
+            # ras.gripper('catch')
+        elif 'G_add' == command:
+            ras.simpleMoveStart("G", "+")
+            # ras.gripper('loose')
+        elif 'GS' in command:
+            ras.simpleMoveStart("G", "stop")
 
 
-		else:
-			print("Command:%s" %command)
+        elif 'save_pos' == command:
+            ras.newPlanAppend()
+            time.sleep(0.5)
+        elif 'stop' == command:
+            ras.moveThreadingStop()
+        elif 'create_Plan' == command:
+            ras.createNewPlan()
+        elif 'plan' == command:
+            ras.planThreadingStart()
+        elif 'save_Plan' == command:
+            ras.savePlanJson()
+
+
+        else:
+            print("Command:%s" %command)
+
+
+async def check_permit(websocket):
+    while True:
+        recv_str = await websocket.recv()
+        cred_dict = recv_str.split(":")
+        if cred_dict[0] == "admin" and cred_dict[1] == "123456":
+            response_str = "congratulation, you have connect with server\r\nnow, you can do something else"
+            await websocket.send(response_str)
+            return True
+        else:
+            response_str = "sorry, the username or password is wrong, please submit again"
+            await websocket.send(response_str)
+
+async def recv_msg(websocket):
+    global speed_set, modeSelect
+    direction_command = 'no'
+    turn_command = 'no'
+
+    while True: 
+        response = {
+            'status' : 'ok',
+            'title' : '',
+            'data' : None
+        }
+
+        data = ''
+        data = await websocket.recv()
+        try:
+            data = json.loads(data)
+        except Exception as e:
+            print('not A JSON')
+
+        if not data:
+            continue
+
+        if isinstance(data,str):
+            webserver(data)
+
+            if 'get_info' == data:
+                response['title'] = 'get_info'
+                response['data'] = [info.get_cpu_tempfunc(), info.get_cpu_use(), info.get_ram_info()]
+
+            if 'wsB' in data:
+                try:
+                    set_B=data.split()
+                    speed_set = int(set_B[1])
+                except:
+                    pass
+
+
+        print(data)
+        response = json.dumps(response)
+        await websocket.send(response)
+
+async def main_logic(websocket, path):
+    await check_permit(websocket)
+    await recv_msg(websocket)
 
 
 if __name__ == '__main__':
-	# while 1:
-	#   time.sleep(10)
-
-	@get("/")
-	def index():
-		return template("index")
-
-	@get("/value")
-	def get_some():
-		car = Car()
-		value11 = car.post_value()
-		# def p_value(value11):
-		print(str(value11))
-		return '<html><head></head><body id="bd"> {value} </body></html>'.format(value = str(value11))
-
-
-	@post("/cmd")
-	def cmd():
-		adss=request.body.read().decode()
-		print("pressinput:"+adss)
-		webserver(adss)
-		return "OK"
-	run(host="0.0.0.0", port=5000)
+    flask_app = app.webapp()
+    flask_app.startthread()
+    while  1:
+        try:                  #Start server,waiting for client
+            start_server = websockets.serve(main_logic, '0.0.0.0', 8888)
+            asyncio.get_event_loop().run_until_complete(start_server)
+            print('waiting for connection...')
+            break
+        except Exception as e:
+            print(e)
+    try:
+        asyncio.get_event_loop().run_forever()
+    except Exception as e:
+        print(e)
