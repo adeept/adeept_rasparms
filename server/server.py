@@ -85,8 +85,8 @@ if __name__ == '__main__':
                 tcpCliSock, addr = tcpSerSock.accept()
                 print('...connected from :', addr)
                 break
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
         try:
             run()
