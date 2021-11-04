@@ -10,6 +10,10 @@ import socket
 import time
 import threading
 import info
+import raspArmS
+
+ras = raspArmS.RaspArmS()
+ras.start()
 
 def info_send_client():
     SERVER_IP = addr[0]
@@ -45,8 +49,55 @@ def run():
         if not data:
             continue
 
-        elif 'forward' == data:
-            pass
+        # elif 'forward' == data:
+        #     pass
+        elif data == "X_add":
+            ras.simpleMoveStart("X", "+")
+        elif data == "X_minus":
+            ras.simpleMoveStart("X", "-")
+        elif data == "XS":
+            ras.simpleMoveStart("X", "stop")
+
+        elif data == 'Y_add':
+            ras.simpleMoveStart("Y", "+")
+        elif data == 'Y_minus':
+            ras.simpleMoveStart("Y", "-")
+        elif data == 'YS':
+            ras.simpleMoveStart("Y", "stop")
+
+        elif 'Z_minus' == data:
+            ras.simpleMoveStart("Z", "-")
+        elif 'Z_add' == data:
+            ras.simpleMoveStart("Z", "+")
+        elif 'ZS' in data:
+            ras.simpleMoveStart("Z", "stop")
+
+        elif 'G_minus' == data:
+            ras.simpleMoveStart("G", "-")
+            # ras.gripper('catch')
+        elif 'G_add' == data:
+            ras.simpleMoveStart("G", "+")
+            # ras.gripper('loose')
+        elif 'GS' in data:
+            ras.simpleMoveStart("G", "stop")
+
+
+        elif 'save_pos' == data:
+            ras.newPlanAppend()
+            time.sleep(0.5)
+        elif 'stop' == data:
+            ras.moveThreadingStop()
+        elif 'create_Plan' == data:
+            ras.createNewPlan()
+        elif 'plan' == data:
+            ras.planThreadingStart()
+        elif 'save_Plan' == data:
+            ras.savePlanJson()
+
+
+        else:
+            print("Command:%s" %data)
+
 
         print(data)
 
